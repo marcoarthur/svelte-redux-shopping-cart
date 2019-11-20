@@ -9,6 +9,11 @@ context('App', () => {
   it('the cart is empty', () => {
     cy.get('p').contains('Total: $0.00')
   })
+  it('the discount is 0.00%', () => {
+    cy.get('span.discount-class.face > em').invoke('text').should( text => { 
+      expect(text).to.match(/0\.00%/)
+    }) 
+  })
   it(`there are ${PRODUCT_ITEM_COUNT} product items`, () => {
     cy.get(':nth-child(4) > .svelte-u3yj44 > div').then($cursor => {
       expect($cursor.length).to.eq(PRODUCT_ITEM_COUNT)
@@ -25,5 +30,9 @@ context('App', () => {
   it('that can be clicked to fill cart', () => {
     cy.get(':nth-child(4) > .svelte-u3yj44 > div button').click({multiple:true})
     cy.get('p').contains('Total: $531.47')
+    cy.get('span.discount-class.face > em').invoke('text').should( text => { 
+      expect(text).to.match(/[^0].\d\d%/)
+    })
   })
+
 })

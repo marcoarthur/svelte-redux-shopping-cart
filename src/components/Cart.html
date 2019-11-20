@@ -38,7 +38,14 @@
   {/if}
   </div>
 
-  <p>Total: &#36;{total}</p>
+  <Discount faceValue={discount}/>
+  <p>
+  Total: &#36;{ total }
+  {#if hasDiscount}
+  - {total*(discount/100)}
+  = {total*(1 - discount/100)}
+  {/if}
+  </p>
   <button on:click='fire("checkout")' disabled={disabled}>
     Checkout
   </button>
@@ -46,11 +53,13 @@
 
 <script>
   import Product from './Product.html'
+  import Discount from './Discount.html'
   export default {
-    components: { Product },
+    components: { Product, Discount },
     computed: {
       hasProducts: ({ products })    => !!products.length,
       disabled   : ({ hasProducts }) => hasProducts? '':'disabled',
+      hasDiscount: ({ discount }) => discount > 0
     },
   }
 </script>
